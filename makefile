@@ -7,7 +7,7 @@ CFLAGS = -mcmodel=medium
 LFLAGS = -mcmodel=medium -static-libgfortran -static-libgcc -I/usr/local/include -pthread -I/usr/local/lib -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -L/usr/local/lib -Wl,-Bstatic -lmpi_usempi -lmpi_mpifh -lmpi -lopen-rte -lopen-pal -lm -lrt -lutil
 
 ifeq ($(DEBUG),1)
-	CFLAGS += -g3 -fbounds-check -ffpe-trap=zero,overflow,underflow
+	CFLAGS += -g3 -Og -fbounds-check -ffpe-trap=invalid,zero,overflow
 else
 	CFLAGS += -O2 -lto
 	LFLAGS += -lto
