@@ -103,9 +103,10 @@ module part_init
                   xp(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz-1)-qz(1))
                   m_arr(l) = mass
                   mrat(l) = mratio
-                  beta_p(l) = beta_particle + &       ! Comment for no density gradient
-                        amp*(1-exp(-((xp(l,3)-qz(nz/2-disp))/ &         !Gaussian distribution
-                        (grad*dz_grid(nz/2-disp)))**2))
+                  beta_p(l) = 1
+                  !beta_particle + &       ! Comment for no density gradient
+                   !     amp*(1-exp(-((xp(l,3)-qz(nz/2-disp))/ &         !Gaussian distribution
+                    !    (grad*dz_grid(nz/2-disp)))**2))
 !     x     (.5*amp*(-tanh((xp(l,3)-qz(nz/2-disp))                      !hyperbolic tangent density
 !     x     /(grad*dz_grid(nz/2-disp)))
 !     x     +tanh((xp(l,3)-qz(nz/2+disp))/
