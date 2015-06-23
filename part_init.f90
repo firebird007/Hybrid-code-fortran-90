@@ -178,7 +178,8 @@ module part_init
             do k=1,nz
 !                  grav(i,j,k) = amp*2/(grad*dz_grid(nz/2-disp))**2*(qz(nz/2-disp)-qz(k))* &
 !                        exp(-((qz(k)-qz(nz/2-disp))/(grad*dz_grid(nz/2-disp)))**2) * Temp / np(2,2,k)
-                  grav(i,j,k) = -2*Tempcalc/(mion*(grad*dz_grid(nz/2-disp))**2)*(qz(k)-qz(nz/2-disp))
+                  !grav(i,j,k) = -2*Tempcalc/(mion*(grad*dz_grid(nz/2-disp))**2)*(qz(k)-qz(nz/2-disp))
+                  grav(i,j,k) = 0
 !                  write(*,*) 'gravity.....', grav(i,j,k), i,j,k
 !                  grav(i,j,k) = 8.0;
             enddo
