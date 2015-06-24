@@ -9,8 +9,8 @@ LFLAGS = -mcmodel=medium -static-libgfortran -static-libgcc -I/usr/local/include
 ifeq ($(DEBUG),1)
 	CFLAGS += -g3 -Og -fbounds-check -ffpe-trap=invalid,zero,overflow
 else
-	CFLAGS += -O2 -lto
-	LFLAGS += -lto
+	CFLAGS += -O3 -flto
+	LFLAGS += -O3 -flto
 endif
 F90 = $(MPI) $(CFLAGS)
 
