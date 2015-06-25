@@ -439,53 +439,5 @@ module gutsf
       end subroutine check_time_step
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      subroutine Momentum_diag(up,uf,np,nf,E,b1,pup,puf,peb,input_p)
-            use dimensions
-            use inputs, only: epsilon,mO,q,mBa
-            use grid, only: dx_cell, dy_cell, dz_cell
-            implicit none
-            real, intent(out):: pup(3),puf(3),peb(3)
-            real, intent(in):: up(nx,ny,nz,3), uf(nx,ny,nz,3), np(nx,ny,nz), &
-                               nf(nx,ny,nz), input_p(3)
-            real, intent(inout):: E(nx,ny,nz,3), b1(nx,ny,nz,3)
-            real:: exb(nx,ny,nz,3)                   
-            real:: npave(3), nfave(3), vol
-            integer:: i,j,k,m,ip,jp,kp
-            
-            call crossf2(E,b1,exb)
-            
-            do m=1,3
-                  pup(m) = 0
-                  puf(m) = 0
-                  peb(m) = 0
-            enddo
-            
-            do i = 2,nx-1
-                  do j = 2, ny - 1
-                        do k = 2, nz-1
-                              ip = i+1
-                              jp = j+1
-                              kp = k+1
-                              if (ip .eq. nx) ip = nx-1
-                              if (jp .eq. ny) jp = ny-1
-                              if (kp .eq. nz) kp = nz-1
-                              vol = dx_cell(i)*dy_cell(j)*dz_cell(k)
-!                              npave(1) = 0.5*(np(i,j,k) + np(ip,j,k))
-!                              npave(2) = 0.5*(np(i,j,k) + np(i,jp,k))
-!                              npave(3) = 0.5*(np(i,j,k) + np(i,j,kp))
-!                              nfave(1) = 0.5*(np(i,j,k) + nf(ip,j,k))
-!                              nfave(2) = 0.5*(np(i,j,k) + nf(i,jp,k))
-!                              nfave(3) = 0.5*(np(i,j,k) + nf(i,j,kp))
-                              do m = 1,3
-                                    pup(m) = pup(m) + np(i,j,k)*vol*mBa*up(i,j,k,m)
-                                    puf(m) = puf(m) + nf(i,j,k)*vol*mO*uf(i,j,k,m)
-                                    peb(m) = peb(m) + epsilon*1e3*exb(i,j,k,m)*vol*(mO/q)
-                              enddo
-                              
-                        enddo
-                  enddo
-            enddo
-            
-      end subroutine Momentum_diag
-      
+
 end module gutsf

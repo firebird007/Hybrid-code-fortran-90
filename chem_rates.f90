@@ -22,70 +22,7 @@ module chem_rates
       end subroutine Neut_Center
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      subroutine Ionize_sw_mp(m_tstep)
-! Ionizeds the neutral cloud with a 28s time constant and fill particle arrays, np, vp, up.
-            use dimensions
-            use MPI
-            use misc
-            use gutsp
-            use grid, only: qx,qy,qz
-            use inputs, only: PI,nf_init,omega_p,beta_pu,dx,dy,delz,dt,vsw,mion,km_to_m
-            use var_arrays, only: input_p,up,Ni_tot,input_E,ijkp,m_arr,mrat,beta,beta_p,wght,np,vp,vp1,xp
-            implicit none
-            integer, intent(in):: m_tstep
-            real:: ndot,dNr,theta
-            integer:: i,j,k,l,m,dNi,l1,ierr
-            
-            ndot = 1e-6*nf_init*omega_p         !normalized ionization rate
-            dNr = ndot*dt*beta*beta_pu*dx*delz*nz
-            
-            if (dNr .lt. 1.0) then
-                  if (dNr .gt. pad_ranf()) then
-                        dNr = 1.0
-                        write(*,*) 'new ions...', dNr
-                  endif
-            endif
-            
-            dNi = nint(dNr)
-            
-            l1 = Ni_tot +1
-            
-            do l= l1, l1+dNi-1
-                  theta = pad_ranf()*2*PI
-                  
-                  vp(l,1) = vsw+vsw*cos(theta) !+dvx
-                  vp(l,2) = vsw*sin(theta) !+dvz 
-                  vp(l,3) = 0.0
 
-                  xp(l,1) = qx(1)+(1.0-pad_ranf())*(qx(nx-1)-qx(1))
-                  xp(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
-                  xp(l,3) = qz(1)+(1.0-pad_ranf())*(qz(nz-1)-qz(1))
-                  
-                  call get_pindex(i,j,k,l)
-                  
-                  mrat(l) = 1.0
-                  m_arr(l) = mion
-                  beta_p(l) = beta_pu
-                  
-                  do m=1,3
-                        vp1(l,m) = vp(l,m)
-                        input_E = input_E + 0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / &
-                              beta*beta_p(l)
-                        input_p(m) = input_p(m) + m_arr(l)*vp(l,m) / beta*beta_p(l)
-                  enddo
-                  
-            enddo
-                  
-            call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-                  
-            Ni_tot = Ni_tot + dNi
-                  
-            call get_interp_weights()
-            call update_np()
-            call update_up(vp)
-            
-      end subroutine Ionize_sw_mp
-      
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine Mass_load_Io(m_tstep)
 ! Mass load Io with ions witha a specific weight interp
