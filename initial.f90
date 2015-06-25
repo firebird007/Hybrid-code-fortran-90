@@ -2,8 +2,8 @@ module initial
       use dimensions
       implicit none
       contains
-      
-      
+
+
       subroutine grd6_setup(b0,bt,b12,b1,b1p2,nu,input_Eb)
             use inputs, only: q, mO, PI, b0_top, b0_bottom, b0_init, nu_init, km_to_m, mu0
             use grid, only: dx_cell, dy_cell, dz_cell
@@ -14,23 +14,23 @@ module initial
                                 b1(nx,ny,nz,3), &
                                 b1p2(nx,ny,nz,3), &
                                 nu(nx,ny,nz)
-            real, intent(inout):: input_Eb                    
-                                
+            real, intent(inout):: input_Eb
+
             real:: eoverm, mO_q, vol
             real:: b0_1x, b0_2x, b0_1y, b0_2y, phi
             integer:: i,j,k,m
-            
+
             eoverm = q/mO
             mO_q = mO/q
-            
+
             phi = 2.0*PI/180.0
-            
+
             b0_1x = b0_top*eoverm*sin(phi)
             b0_2x = b0_bottom*eoverm*sin(phi)
-            
+
             b0_1y = -b0_top*eoverm*cos(phi)
             b0_2y = -b0_bottom*eoverm*cos(phi)
-            
+
             do i=1,nx
                   do j=1,ny
                         do k=1,nz
@@ -40,7 +40,7 @@ module initial
                         enddo
                   enddo
             enddo
-            
+
 !            input_Eb = 0.0
             do i=1,nx
                   do j=1,ny
@@ -57,17 +57,17 @@ module initial
                         enddo
                   enddo
             enddo
-            
-            
+
+
             open(40,file='b0.dat',status='unknown',form='unformatted')
             write(40) nz
             write(40) b0
             close(40)
-            
+
       end subroutine grd6_setup
- 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
- 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
       subroutine grd7()
             use grid
             use mult_proc, only: my_rank
@@ -76,22 +76,22 @@ module initial
             integer, parameter:: nrgrd = 20
             integer:: i,j,k,ind
             real:: xsf,zsf,zplus,zminus,xplus,xminus,yplus,yminus
-            
+
             rk = nz/2
             rj= ny/2
             ri = nx/2
-!!!!!!!!!Unstretched grids!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  
-  
+!!!!!!!!!Unstretched grids!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             do j=1,ny
                   qy(j) = j*dy
                   dy_grid(j) = dy
             enddo
-            
+
             do i = 1,nx
                   qx(i) = i*dx
                   dx_grid(i) = dx
             enddo
-            
+
 !!!!!!!Stretch X direction!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !            xsf = 0.0   !x stretch factor
@@ -110,22 +110,22 @@ module initial
 !                  ind = ri-nrgrd-i
 !                  dx_grid(ind) = dx + xsf*dx*(ri-nrgrd-1-ind)/(ri-nrgrd-1)
 !            enddo
-            
+
 !            qx(1) = dx
-            
+
 !            do i = 2,nx
 !                  qx(i) = qx(i-1)+dx_grid(i)
 !            enddo
-            
+
 !            do i=1, nx-1
 !                  dx_grid(i) = qx(i+1)-qx(i)
 !            enddo
-            
+
 !            dx_grid(nx) = dx_grid(nx-1)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-            
-            
-!!!!!!!Stretch Z direction!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            
+
+
+!!!!!!!Stretch Z direction!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             zsf = 0.0   !z stretch factor
             !up from center
             do k = rk, rk + nrgrd
@@ -142,17 +142,17 @@ module initial
                   ind = rk-nrgrd-k
                   dz_grid(ind) =  delz + zsf*delz*(rk-nrgrd-1-ind)/(rk-nrgrd-1)
             enddo
-            
+
             qz(1) = delz
-            
+
             do k=2,nz
                   qz(k) = qz(k-1)+dz_grid(k)
             enddo
-            
+
             do k=1, nz-1
                   dz_grid(k) = qz(k+1)-qz(k)
             enddo
-            
+
             dz_grid(nz) = dz_grid(nz-1)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -160,13 +160,14 @@ module initial
             dz_cell(nz) = dz_grid(nz)
             zrat(1) = 0.5
             zrat(nz) = 0.5
+
+            dz_cell(2:nz-1) = ((qz(3:nz) + qz(2:nz-1))/2.0) - ((qz(2:nz-1) + qz(1:nz-2))/2.0)
             do k=2, nz-1
-                  dz_cell(k) = ((qz(k+1) + qz(k))/2.0) - ((qz(k) + qz(k-1))/2.0)
                   zplus = (qz(k+1) + qz(k))/2.0
                   zminus = (qz(k) + qz(k-1))/2.0
                   zrat(k) = (qz(k) - zminus)/(zplus - zminus)
             enddo
-            
+
             dx_cell(1) = dx_grid(1)
             dx_cell(nx) = dx_grid(nx)
             xrat(1) = 0.5
@@ -177,7 +178,7 @@ module initial
                   xminus = (qx(i) + qx(i-1))/2.0
                   xrat(i) = (qx(i) - xminus)/(xplus - xminus)
             enddo
-            
+
             dy_cell(1) = dy_grid(1)
             dy_cell(ny) = dy_grid(ny)
             yrat(1) = 0.5
@@ -188,10 +189,10 @@ module initial
                   yminus = (qy(j) + qy(j-1))/2.0
                   yrat(j) = (qy(j) - yminus)/(yplus - yminus)
             enddo
-            
+
             if (my_rank .eq. 0) then
                   open(40,file=trim(out_dir)//'c.coord.dat',status='unknown',form='unformatted')
-                  
+
                   write(40) nx
                   write(40) ny
                   write(40) nz
@@ -201,10 +202,10 @@ module initial
                   write(40) dz_grid
                   write(40) dz_cell
                   close(40)
-                  
+
             endif
-            
+
       end subroutine grd7
-      
+
 end module initial
-            
+

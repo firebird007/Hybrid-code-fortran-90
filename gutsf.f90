@@ -9,15 +9,15 @@ module gutsf
             real, intent(in):: b1p2(nx,ny,nz,3), b0(nx,ny,nz,3)
             real, intent(inout):: b1(nx,ny,nz,3)
             real, intent(out):: bt(nx,ny,nz,3), b12(nx,ny,nz,3)
-            
+
             integer:: i,j,k,m
-            
+
             do i=1,nx
                   do j=1,ny
                         do k= 1,nz
                               bt(i,j,k,1) = b1p2(i,j,k,1)! + b0(i,j,k,1)
                               bt(i,j,k,2) = b1p2(i,j,k,2)! + b0(i,j,k,2)
-                              bt(i,j,k,3) = b1p2(i,j,k,3)! + b0(i,j,k,3) 
+                              bt(i,j,k,3) = b1p2(i,j,k,3)! + b0(i,j,k,3)
                               do m=1,3
                                     b12(i,j,k,m)= b1(i,j,k,m)
                                     b1(i,j,k,m) = b1p2(i,j,k,m)
@@ -26,10 +26,10 @@ module gutsf
                   enddo
             enddo
       end subroutine f_update_tlev
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine crossf2(aa,btc,cc)
-!The cross product is formed at the main cell center.  aa and btc must be given already 
+!The cross product is formed at the main cell center.  aa and btc must be given already
 !extrapolated to the main cell center.
             use dimensions
             use boundary
@@ -39,36 +39,36 @@ module gutsf
             real:: ct(nx,ny,nz,3)
             real:: ax,ay,az,bx,by,bz
             integer:: i,j,k,im,jm,km,ip,jp,kp
-            
+
             call periodic(aa)
             call periodic(btc)
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
                               im = i-1
                               jm = j-1
                               km = k-1
-                              
+
                               ax = aa(i,j,k,1)
                               bx = btc(i,j,k,1)
-                              
+
                               ay = aa(i,j,k,2)
                               by = btc(i,j,k,2)
-                              
+
                               az = aa(i,j,k,3)
                               bz = btc(i,j,k,3)
-                              
+
                               ct(i,j,k,1) = ay*bz - az*by
                               ct(i,j,k,2) = az*bx - ax*bz
                               ct(i,j,k,3) = ax*by - ay*bx
-                              
+
                         enddo
                   enddo
             enddo
-            
+
             call periodic(ct)
-            
+
 ! Extrapolate back to the main cell contravariant positions.
 ! Just average across cells since cell edges are centered about the grid points
 
@@ -78,18 +78,18 @@ module gutsf
                               ip = i+1
                               jp = j+1
                               kp = k+1
-                              
+
                               cc(i,j,k,1) = 0.5*(ct(i,j,k,1)+ct(ip,j,k,1))
                               cc(i,j,k,2) = 0.5*(ct(i,j,k,2)+ct(i,jp,k,2))
                               cc(i,j,k,3) = 0.5*(ct(i,j,k,3)+ct(i,j,kp,3))
                         enddo
                   enddo
             enddo
-            
+
             call periodic(cc)
-            
+
       end subroutine crossf2
-    
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine curlB2(b1,np,aj)
 ! Calculates curl B / n*alpha. The resulting 'current' is called aj which is used in several other placed in the code.
@@ -106,7 +106,7 @@ module gutsf
             real, intent(out):: aj(nx,ny,nz,3)
             real:: curl_B(3), ntot(3)
             integer:: i,j,k,m,ip,jp,kp
-            
+
             call periodic(b1)
 !            call fix_normal_b(b1)
             do i=2,nx-1
@@ -115,11 +115,11 @@ module gutsf
                               ip = i+1
                               jp = j+1
                               kp = k+1
-                              
+
                               ntot(1) = 0.5*(np(i,j,k)+np(ip,j,k))
                               ntot(2) = 0.5*(np(i,j,k)+np(i,jp,k))
                               ntot(3) = 0.5*(np(i,j,k)+np(i,j,kp))
-                              
+
                               curl_B(1) = (b1(i,j,k,3)/dy) - (b1(i,j-1,k,3)/dy) &
                                     + (b1(i,j,k-1,2)/dz_cell(k)) &
                                     - (b1(i,j,k,2)/dz_cell(k))
@@ -128,20 +128,20 @@ module gutsf
                                     - (b1(i,j,k,3)/dx) + (b1(i-1,j,k,3)/dx)
                               curl_B(3) = (b1(i,j,k,2)/dx) - (b1(i-1,j,k,2)/dx) &
                                     + (b1(i,j-1,k,1)/dy) - (b1(i,j,k,1)/dy)
-                                    
+
                               do m=1,3
                                     aj(i,j,k,m) = curl_B(m)/(ntot(m)*alpha)
                               enddo
                         enddo
                   enddo
             enddo
-            
+
       end subroutine curlB2
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine curlB(b1,np,aj)
 ! Calculates curl B / n*alpha.  The resulting "current" is called aj
-! which is used in several other places in the code.  This curl is 
+! which is used in several other places in the code.  This curl is
 ! performed on the main cell where B is covarient.  The resulting
 ! current is main cell contravarient.  Note that dz_cell is used for
 ! the cell dimensions since dz_grid is not equal to dz_cell on non-
@@ -156,42 +156,42 @@ module gutsf
             real, intent(out) :: aj(nx,ny,nz,3)
             real:: curl_B(3), ntot(3)
             integer:: i,j,k,m,ip,jp,kp
-            
+
             call periodic(b1)
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
-                                    
+
                               ip = i+1
                               jp = j+1
                               kp = k+1
-                              
+
                               ntot(1) = 0.5*(np(i,j,k)+np(ip,j,k))
                               ntot(2) = 0.5*(np(i,j,k)+np(i,jp,k))
                               ntot(3) = 0.5*(np(i,j,k)+np(i,j,kp))
-                              
-                              
+
+
                               curl_B(1) = (b1(i,j,k,3) - &
                                     b1(i,j-1,k,3))/dy_cell(j) + &
-                                    (b1(i,j,k-1,2) - b1(i,j,k,2))/dz_cell(k) 
+                                    (b1(i,j,k-1,2) - b1(i,j,k,2))/dz_cell(k)
                               curl_B(2) = (b1(i,j,k,1) - &
                                     b1(i,j,k-1,1))/dz_cell(k) + &
                                     (b1(i-1,j,k,3) - b1(i,j,k,3))/dx_cell(i)
                               curl_B(3) = (b1(i,j,k,2) - &
                                     b1(i-1,j,k,2))/dx_cell(i) + &
                                     (b1(i,j-1,k,1) - b1(i,j,k,1))/dy_cell(j)
-                                    
-                                    
+
+
                               do m = 1,3
                                     aj(i,j,k,m) = curl_B(m)/(ntot(m)*alpha)
                               enddo
                         enddo
                   enddo
             enddo
-            
+
       end subroutine curlB
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine curlE(E,curl_E)
 ! E is dual cell covarient, and curl_E will be returned as main
@@ -203,7 +203,7 @@ module gutsf
             real, intent(in):: E(nx,ny,nz,3)
             real, intent(out):: curl_E(nx,ny,nz,3)
             integer:: i,j,k
-      
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
@@ -213,13 +213,13 @@ module gutsf
                                     + (E(i,j,k+1,1) - E(i,j,k,1))/dz_grid(k)
                               curl_E(i,j,k,3) = (E(i,j,k,1) - E(i,j+1,k,1))/dy_grid(j) &
                                     + (E(i+1,j,k,2) - E(i,j,k,2))/dx_grid(i)
-                              
+
                         enddo
                   enddo
             enddo
-                        
+
       end subroutine curlE
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine get_E(E,bt,aj,up,nu)
 ! E must be at time level m. We have uf at levels m-1/2 and m+1/2, so
@@ -235,7 +235,7 @@ module gutsf
             real, intent(out):: E(nx,ny,nz,3)
             real:: a(nx,ny,nz,3), c(nx,ny,nz,3), aa(nx,ny,nz,3), btc(nx,ny,nz,3), gravc(nx,ny,nz)
             integer:: i,j,k,m
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
@@ -245,12 +245,12 @@ module gutsf
                         enddo
                   enddo
             enddo
-            
+
             call face_to_center(a,aa)
             call edge_to_center(bt,btc)
             call crossf2(aa,btc,c)
             call grav_to_center(grav,gravc)
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
@@ -263,11 +263,11 @@ module gutsf
                         enddo
                   enddo
             enddo
-            
+
             call periodic(E)
-      
+
       end subroutine get_E
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine predict_B(b12,b1p2,bt,E,aj,up,nu,dtsub)
 ! Predictor step in magnetic field update
@@ -279,10 +279,10 @@ module gutsf
             real, intent(out):: b1p2(nx,ny,nz,3), E(nx,ny,nz,3)
             real:: curl_E(nx,ny,nz,3)
             integer:: i,j,k,m
-            
+
             call get_E(E,bt,aj,up,nu)
             call curlE(E,curl_E)
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
@@ -292,11 +292,11 @@ module gutsf
                         enddo
                   enddo
             enddo
-            
+
             call periodic(b1p2)
-            
+
       end subroutine predict_B
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine get_Ep1(E,b1,b1p2,aj,up,np,nu)
 ! The main feature here is that E must be calculated at time level
@@ -317,7 +317,7 @@ module gutsf
                    btp1mf(nx,ny,nz,3), &        !btp1 at contravariant position
                    btc(nx,ny,nz,3), a(nx,ny,nz,3), aa(nx,ny,nz,3), c(nx,ny,nz,3), gravc(nx,ny,nz)
             integer:: i,j,k,m
-            
+
             do i=1,nx
                   do j=1,ny
                         do k=1,nz
@@ -330,7 +330,7 @@ module gutsf
                         enddo
                   enddo
             enddo
-            
+
             call curlB(btp1,np,aj)
 
              do m=1,3
@@ -342,14 +342,14 @@ module gutsf
                         enddo
                   enddo
             enddo
-            
+
             call face_to_center(a,aa)
             call edge_to_face(btp1,btp1mf)
             call face_to_center(btp1mf,btc)
             call grav_to_center(grav,gravc)
-            
+
             call crossf2(aa,btc,c)
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
@@ -362,11 +362,11 @@ module gutsf
                         enddo
                   enddo
             enddo
-            
+
             call periodic(E)
-            
+
       end subroutine get_Ep1
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine correct_B(b1,b1p2,E,aj,up,np,nu,dtsub)
 ! Corrector step in magnetic field update
@@ -379,10 +379,10 @@ module gutsf
             real, intent(out):: E(nx,ny,nz,3),aj(nx,ny,nz,3)
             real:: curl_E(nx,ny,nz,3)
             integer:: i,j,k,m
-            
+
             call get_Ep1(E,b1,b1p2,aj,up,np,nu) !E at time level m
             call curlE(E,curl_E)
-            
+
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
@@ -393,18 +393,18 @@ module gutsf
                                           b1(i,j,k+1,m)+b1(i,j,k-1,m))+ &
                                           lww2*b1(i,j,k,m) - &
                                           dtsub*curl_E(i,j,k,m)
-                                          
+
                                     !no grid averaging
 !                                    b1p2(i,j,k,m) = b1(i,j,k,m) - dtsub*curl_E(i,j,k,m)
                               enddo
                         enddo
                   enddo
             enddo
-            
+
             call periodic(b1p2)
-            
+
       end subroutine correct_B
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine check_time_step(bt,np,dtsub,ntf)
             use dimensions
@@ -415,7 +415,7 @@ module gutsf
             real, intent(inout):: dtsub
             real:: ak,a1,a2,womega,phi,deltat,btot
             integer:: i,j,k
-            
+
             do i=1,nx
                   do j=1,ny
                         do k=1,nz
@@ -427,15 +427,15 @@ module gutsf
                               womega = 0.5*(a1 + sqrt(a1**2 + 4*a2))
                               phi = womega/ak
                               deltat = dx/phi
-                              if(deltat .le. 2.0*dtsub) then 
+                              if(deltat .le. 2.0*dtsub) then
                                     write(*,*) 'time stepping error...',i,j,k
                                     dtsub = dtsub/2.0
-                                    ntf = ntf*2.0
+                                    ntf = ntf*2
                               endif
                         enddo
                   enddo
             enddo
-            
+
       end subroutine check_time_step
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

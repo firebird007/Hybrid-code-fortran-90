@@ -10,7 +10,7 @@ module chem_rates
             implicit none
             real, intent(out):: cx,cy,cz
             real:: x0,y0,z0
-            
+
             x0 = dx/2.0
             y0 = dy/2.0
             z0 = dz_grid(nz/2)/2.0
@@ -20,7 +20,7 @@ module chem_rates
             cz = qz(rj) + z0
 
       end subroutine Neut_Center
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine Ionize_sw_mp(m_tstep)
 ! Ionizeds the neutral cloud with a 28s time constant and fill particle arrays, np, vp, up.
@@ -101,24 +101,24 @@ module chem_rates
             integer, intent(in):: m_tstep
             real:: ddni, theta2, rand1, mdot, sca1 !scaling parameter
             integer:: i,j,k,l,m,l1,dNi,flg,ierr
-            
+
      !       if ((m_tstep .gt. 20) .and. (m_tstep .lt. 600)) then
                   ! default load_rate = 0.1
                   sca1 = exp(-(dt*m_tstep-2)**2/load_rate**2)
-                  
+
                   mdot = sca1*sqrt(mion*nf_init/mu0/1e9)*b0_init*dx*dy*1e6
                   if (my_rank == 0) then
                   write(*,*) 'mdot.........', mdot
                   endif
-                  
-                 
-                  
+
+
+
                   ddni = dt*mdot*beta*beta_pu/(procnum*1.67e-27*m_pu)
                   if (my_rank == 0) then
                   write(*,*) 'ddni......', ddni
                   endif
                   !stop
-                  
+
                   if (ddni .lt. 1.0) then
                         if (ddni .gt. pad_ranf()) then
                               ddni = 1.0
@@ -126,12 +126,12 @@ module chem_rates
                               ddni = 0.0
                         endif
                   endif
-                  
+
                   dNi = nint(ddni)
                   !write(*,*) 'dNi per processor......', dNi
                   !stop
                   l1 = Ni_tot + 1
-                  
+
                   do l= l1, l1+ dNi-1
                         beta_p(l) = beta_pu
                         m_arr(l) = m_pu*1.67e-27
@@ -143,10 +143,10 @@ module chem_rates
                         vp(l,1) = 0.0!57.0*cos(theta2)
                         vp(l,2) = 0.0!57.0*sin(theta2)
                         vp(l,3) = 0.0
-                        
+
                         xp(l,1) = qx(1)+(1.0-pad_ranf())*(qx(nx-1)-qx(1))
                         xp(l,2) = qy(1)+(1.0-pad_ranf())*(qy(ny-1)-qy(1))
-                        
+
                         flg=0
                         do while (flg .eq. 0)
                               xp(l,3) = qz(nz/2-20) + (1.0-pad_ranf())*(qz(nz/2+20)-qz(nz/2-20))
@@ -155,9 +155,9 @@ module chem_rates
                                     flg = 1
                               endif
                         enddo
-                        
+
                         call get_pindex(i,j,k,l)
-                  
+
                         do m=1,3
                               vp1(l,m) = vp(l,m)
                               input_E = input_E + 0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / &
@@ -165,20 +165,20 @@ module chem_rates
                               input_p(m) = input_p(m) + m_arr(l)*vp(l,m)/ &
                                     beta*beta_p(l)
                         enddo
-                        
-                  enddo      
-                 
+
+                  enddo
+
                   call MPI_BARRIER(MPI_COMM_WORLD,ierr)
                   Ni_tot = Ni_tot + dNi
-                 
+
                   call get_interp_weights()
                   call update_np()
                   call update_up(vp)
-                 
+
       !      endif
-            
+
       end subroutine Mass_load_Io
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine res_chex()
             use dimensions
@@ -189,26 +189,26 @@ module chem_rates
             real, parameter:: sigma_chex = 8e-26
             real:: vrel,nn,chex_tau,chex_prob
             integer:: l
-            
+
 !            call Neut_Center(cx,cy,cz)
-            
+
             do l=1, Ni_tot
                   vrel = sqrt(vp(l,1)**2+vp(l,2)**2+vp(l,3)**2)
                   nn = 10000e15
                   chex_tau = 1.0/(nn*sigma_chex*vrel)
                   chex_prob = dt/chex_tau
-                  
+
                   if (pad_ranf() .lt. chex_prob) then
                         write(*,*) 'chex...',l,chex_tau,chex_prob
                         vp(l,:) = 0.0
                         mrat(l) = 16.0/m_pu
                         m_arr(l) = 1.67e-27*m_pu
-                        
+
                   endif
             enddo
-            
+
       end subroutine res_chex
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 

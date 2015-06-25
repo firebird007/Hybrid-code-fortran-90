@@ -1553,7 +1553,7 @@ module gutsp
             up2(:,:,:,:) = 0.0
             up_ave(:,:,:,:) = 0.0
             ct(:,:,:,:) = 0.0
-            
+
             do m=1,3
                   mvp(1:Ni_tot,m) = vp(1:Ni_tot,m)/sqrt(mrat(:Ni_tot))
             enddo
