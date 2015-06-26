@@ -90,52 +90,6 @@ module gutsf
       end subroutine crossf2
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      subroutine curlB2(b1,np,aj)
-! Calculates curl B / n*alpha. The resulting 'current' is called aj which is used in several other placed in the code.
-! This curl is performed on the main cell where B is covariant.  The resulting current is main cell contravariant.
-! Nnote that dz_cell is used for the cell dimension since dz_grid is not equal to dz_cell on non-uniform grid.
-
-            use dimensions
-            use boundary
-            use grid, only: dx_cell,dy_cell,dz_cell
-            use inputs, only: dx,dy,alpha
-            implicit none
-            real, intent(in):: np(nx,ny,nz)
-            real, intent(inout):: b1(nx,ny,nz,3)
-            real, intent(out):: aj(nx,ny,nz,3)
-            real:: curl_B(3), ntot(3)
-            integer:: i,j,k,m,ip,jp,kp
-
-            call periodic(b1)
-!            call fix_normal_b(b1)
-            do i=2,nx-1
-                  do j=2,ny-1
-                        do k=2,nz-1
-                              ip = i+1
-                              jp = j+1
-                              kp = k+1
-
-                              ntot(1) = 0.5*(np(i,j,k)+np(ip,j,k))
-                              ntot(2) = 0.5*(np(i,j,k)+np(i,jp,k))
-                              ntot(3) = 0.5*(np(i,j,k)+np(i,j,kp))
-
-                              curl_B(1) = (b1(i,j,k,3)/dy) - (b1(i,j-1,k,3)/dy) &
-                                    + (b1(i,j,k-1,2)/dz_cell(k)) &
-                                    - (b1(i,j,k,2)/dz_cell(k))
-                              curl_B(2) = (b1(i,j,k,1)/dz_cell(k)) &
-                                    - (b1(i,j,k-1,1)/dz_cell(k)) &
-                                    - (b1(i,j,k,3)/dx) + (b1(i-1,j,k,3)/dx)
-                              curl_B(3) = (b1(i,j,k,2)/dx) - (b1(i-1,j,k,2)/dx) &
-                                    + (b1(i,j-1,k,1)/dy) - (b1(i,j,k,1)/dy)
-
-                              do m=1,3
-                                    aj(i,j,k,m) = curl_B(m)/(ntot(m)*alpha)
-                              enddo
-                        enddo
-                  enddo
-            enddo
-
-      end subroutine curlB2
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine curlB(b1,np,aj)
