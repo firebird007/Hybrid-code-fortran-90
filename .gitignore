@@ -7,3 +7,6 @@ b0.dat
 mloadtest
 output*
 inputs.dat
+*.flb
+*.lst
+vampir*
