@@ -2,14 +2,14 @@ module Var_Arrays
       use dimensions
       implicit none
       real::      b0(nx,ny,nz,3), &     !ambient mag field
-                  b1(nx,ny,nz,3), &     !1st order mag field   
+                  b1(nx,ny,nz,3), &     !1st order mag field
                   b12(nx,ny,nz,3), &    !b1 at previous time step
                   b1p2(nx,ny,nz,3), &   !temp b1 at time level m+1
                   bt(nx,ny,nz,3), &     !total mag field, mc covarient
                   btmf(nx,ny,nz,3), &   !main cell contravarient bt field
                   btc(nx,ny,nz,3), &    !btmf at cell center for particle move
                   np(nx,ny,nz), &       !particle ion density at level n, n+1/2
-                  np3(nx,ny,nz,3), &    
+                  np3(nx,ny,nz,3), &
                   vp(Ni_max,3), &       !particle velocity at t level n+1/2
                   vp1(Ni_max,3), &      !particle velocity at t level n
                   vplus(Ni_max,3), &    !v+ used in velocity update
@@ -32,21 +32,21 @@ module Var_Arrays
                   input_p(3), &
                   input_E, input_Eb, bndry_Eflux, prev_Etot, &
                   grav(nx,ny,nz)            !gravity term
-      
+
       integer(4):: Ni_tot
-      
+
       !Location (indices) of particles in the grid
-      
+
       integer:: ijkp(Ni_max,3)
       logical:: in_bounds(Ni_max)
       real:: mix_ind(Ni_max)
-      
+
       !Weight variables for trilinear interpolation
-      
+
       real:: wght(Ni_max,8)
-                  
-                  
+
+
       integer:: np_t_flg(Ni_max), np_b_flg(Ni_max)
-      
+
 end module Var_Arrays
-                  
+

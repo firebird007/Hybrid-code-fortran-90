@@ -7,6 +7,6 @@ module grid
       real:: dx_grid(nx), dx_cell(nx), dy_grid(ny), dy_cell(ny)
       real:: xrat(nx), yrat(ny), zrat(nz)
       integer:: ri,rj,rk
-      
+
 end module grid
-      
+
