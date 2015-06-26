@@ -228,7 +228,6 @@ module gutsf
             use boundary
             use grid_interp
             use var_arrays, only: grav
-            use inputs, only: mion
             implicit none
             real, intent(in):: aj(nx,ny,nz,3), up(nx,ny,nz,3), nu(nx,ny,nz)
             real, intent(inout):: bt(nx,ny,nz,3)
@@ -307,7 +306,6 @@ module gutsf
             use grid_interp
             use boundary
             use var_arrays, only: grav
-            use inputs, only: mion
             implicit none
             real, intent(in):: b1(nx,ny,nz,3), b1p2(nx,ny,nz,3), up(nx,ny,nz,3), nu(nx,ny,nz), &
                                np(nx,ny,nz)

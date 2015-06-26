@@ -79,7 +79,7 @@ module part_init
       subroutine load_Maxwellian(vth,Ni_tot_1,mass,mratio)
             use dimensions
             use misc
-            use inputs, only: PI, vsw, dx, dy, km_to_m, beta_particle, kboltz, mion
+            use inputs, only: PI, vsw, dx, dy, km_to_m, kboltz, mion
             use grid, only: qx,qy,qz,dz_grid
             use gutsp
             use var_arrays, only: np,vp,vp1,xp,input_p,up,Ni_tot,input_E,ijkp,m_arr,mrat,beta,beta_p,wght,grav,temp_p
@@ -191,7 +191,7 @@ module part_init
       subroutine load_ring_beam(vring,dNi,mass,mratio)
             use dimensions
             use misc
-            use inputs, only: PI, vsw, dx, dy, km_to_m, beta_pu, ion_amu,m_pu,beta_particle
+            use inputs, only: PI, vsw, dx, dy, km_to_m, ion_amu,m_pu,beta_particle
             use grid, only: qx,qy,qz,dz_grid
             use gutsp
             use var_arrays, only: np,vp,vp1,xp,input_p,up,Ni_tot,input_E,ijkp,m_arr,mrat,beta,beta_p,wght

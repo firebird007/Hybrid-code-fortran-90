@@ -90,7 +90,6 @@ module gutsp
             use dimensions
             use grid_interp
             use var_arrays, only: Ep,aj,up,btc,Ni_tot,ijkp,mrat,wght,grav
-            use inputs, only: mion
             implicit none
             real:: ajc(nx,ny,nz,3), &     !aj at cell center
                    upc(nx,ny,nz,3), &   !up at cell center
