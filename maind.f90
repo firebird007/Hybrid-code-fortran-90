@@ -1,5 +1,5 @@
 program hybrid
-      
+
       use mpi
       use dimensions
       use Var_Arrays
@@ -13,9 +13,9 @@ program hybrid
       use grid_interp
       use chem_rates
       use grid
-      
+
       implicit none
-      
+
       real:: Evp,Euf,EB1,EB1x,EB1y,EB1z,EE,EeP,input_EeP
       real:: input_chex, input_bill,dtsub
       real:: pup(3),puf(3),peb(3)
@@ -25,20 +25,20 @@ program hybrid
       logical:: restart = .false.
       integer(4):: Ni_tot_sw,Ni_tot_sys
       integer:: i,j,k,n,ntf !looping indicies
-      
+
 !      filenum = (/'1 ','2 ','3 ','4 ','5 ','6 ','7 ','8 ','9 ', &
 !            '10','11','12','13','14','15','16'/)
-                 
+
       call readInputs()
       call initparameters()
-      
+
       call MPI_INIT(ierr)
       call MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierr)
       call MPI_COMM_SIZE(MPI_COMM_WORLD, procnum, ierr)
-      
-      
+
+
       call system_clock(t1, cnt_rt)
-      
+
 !Initialize all variables
 
       write(filenum, '(I2)') my_rank
@@ -47,13 +47,13 @@ program hybrid
       Ni_tot_0 = Ni_tot
       Ni_tot_sw = Ni_tot
       Ni_tot_sys = Ni_tot*procnum
-      
+
       if (my_rank .eq. 0) then
             call check_inputs()
             write(*,*) 'Partilces per cell... ', Ni_tot_sys/nz
             write(*,*) ' '
       endif
-      
+
       mstart = 0
       ndiag = 0
       prev_Etot = 1.0
@@ -63,7 +63,7 @@ program hybrid
 !      call random_initialize(seed)
       call seed_mpi(my_rank)
       call MPI_BARRIER(MPI_COMM_WORLD, ierr)
-      
+
       if (.not. restart) then
             do i=1,nx
                   do j=1,ny
@@ -76,30 +76,30 @@ program hybrid
                   enddo
             enddo
       endif
-      
+
       input_Eb = 0.0
       input_EeP= 0.0
-      
+
       call grd7()
       call grd6_setup(b0,bt,b12,b1,b1p2,nu,input_Eb)
       call get_beta(Ni_tot_sys,beta)
-  
+
       input_E = 0.0
       bndry_Eflux = 0.0
-      
+
       call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-      
+
       !Initialize particles: use load Maxwellian, or sw_part_setup, etc.
       call load_Maxwellian(vth,1,mion,1.0)
 !      call load_ring_beam(57.0,40000,mion,1.0)
-      
+
       Ni_tot_sys = Ni_tot*procnum
       write(*,*) Ni_tot_sys, Ni_tot, procnum
       write(*,*) 'Particles per cell...', Ni_tot_sys/nz
-      
+
       call f_update_tlev(b1,b12,b1p2,bt,b0)
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !  Check for restart flag
 
       write(*,*) 'restart status...', restart
@@ -113,13 +113,13 @@ program hybrid
 !                  ijkp,mstart,input_p,input_EeP,prev_Etot,nf1,nf3,nfp1, &
 !                  input_chex,input_bill,pf,pf1,mrat,m_arr
             write(*,*) 'restarting hybrid ....'
-            
+
             if (my_rank .gt. 0) then
                   open(211,file='restart.part'//trim(filenum),status='unknown',form='unformatted')
                   read(211) vp,vp1,vplus,vminus,xp,Ep,input_E,Ni_tot,ijkp,input_p,mrat,m_arr
             endif
       endif
-      
+
       close(211)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Write parameter file
@@ -127,7 +127,7 @@ program hybrid
 
                   open(109, file=trim(out_dir)//'para.dat', &
                         status='unknown',form='unformatted')
-         
+
                   write(109) nx,ny,nz,dx,dy,delz
                   write(109) nt,dtsub_init,ntsub,dt,nout
                   write(109) out_dir
@@ -139,13 +139,13 @@ program hybrid
                   write(109) vth_top,vth_bottom
                   write(109) alpha,beta
                   close(109)
-                  
+
 ! Write fft parameter file
 !                  open(401, file = trim(out_dir)//'fft.dat',status='unknown',form='unformatted')
 !                  write(401) dt,nt,omega_p
 
             endif
-      
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !       Inititalize diagnositc output files
 
@@ -157,9 +157,9 @@ program hybrid
             open(140,file=trim(out_dir)//'c.aj.dat',status='unknown',form='unformatted')
             open(150,file=trim(out_dir)//'c.E.dat',status='unknown',form='unformatted')
             open(160,file=trim(out_dir)//'c.energy.dat',status='unknown',form='unformatted')
-            
+
             !diagnostics chex,bill,satnp
-            
+
             open(180,file=trim(out_dir)//'c.up.dat',status='unknown',form='unformatted')
             open(190,file=trim(out_dir)//'c.momentum.dat',status='unknown',form='unformatted')
             open(192,file=trim(out_dir)//'c.p_conserve.dat',status='unknown',form='unformatted')
@@ -174,14 +174,14 @@ program hybrid
             open(342,file=trim(out_dir)//'c.test_part.dat',status='unknown',form='unformatted')
             open(350,file=trim(out_dir)//'c.mnp.dat',status='unknown',form='unformatted')
        endif
-       
+
        if (my_rank .gt. 0) then
             open(305,file=trim(out_dir)//'c.xp_'//trim(filenum)//'.dat',status='unknown',form='unformatted')
             open(310,file=trim(out_dir)//'c.vp_'//trim(filenum)//'.dat',status='unknown',form='unformatted')
             open(315,file=trim(out_dir)//'c.mrat_'//trim(filenum)//'.dat',status='unknown',form='unformatted')
             open(317,file=trim(out_dir)//'c.beta_p__'//trim(filenum)//'.dat',status='unknown',form='unformatted')
        endif
-       
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !       MAIN LOOP
@@ -197,25 +197,25 @@ program hybrid
             call get_interp_weights()
             call update_np()                  !np at n+1/2
             call update_up(vp)            !up at n+1/2
-          
+
             !energy diagnostics
             call get_bndry_Eflux(b1,E,bndry_Eflux)
 
             call Energy_diag(Evp,Euf,EB1,EB1x,EB1y,EB1z,EE,EeP)
-          
+
             call curlB(bt,np,aj)
             call edge_to_center(bt,btc)
             call extrapol_up()
             call get_Ep()
-            
+
             call get_vplus_vminus()
             call improve_up()
- 
+
             call get_Ep()
 
             call get_vplus_vminus()
             call get_vp_final()
-                      
+
             call move_ion_half() !1/2 step ion move to n+1/2
 
             call get_interp_weights()
@@ -230,27 +230,27 @@ program hybrid
             dtsub = dtsub_init
             ntf=ntsub
             call check_time_step(bt,np,dtsub,ntf)
-            
+
             do n=1,ntf
                   call curlB(bt,np,aj)
-                  
+
                   call predict_B(b12,b1p2,bt,E,aj,up,nu,dtsub)
-                  
+
                   call correct_B(b1,b1p2,E,aj,up,np,nu,dtsub)
-                  
+
                   call f_update_tlev(b1,b12,b1p2,bt,b0)
-                  
+
             enddo
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!           
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             call move_ion_half()       !final ion move to n+1
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !       diagnositc output
-            
+
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-            
+
             if (my_rank .eq. 0) then
                   write(160) m
                   write(160) input_E,input_EeP,Evp,Euf,EB1,EB1x,EB1y,EB1z,EE, &
@@ -260,9 +260,9 @@ program hybrid
                   
                   !fft output
 !                  write(401) b1(2,2,loc,1), b1(2,2,loc,2), b1(2,2,loc,3)
-                  
+
             endif
-            
+
             ndiag = ndiag+1
             if (ndiag .eq. nout) then
                   call get_temperature()
@@ -299,10 +299,10 @@ program hybrid
                         write(340) up_b
                         write(350) m
                         write(350) mnp
-                        
+
                         ndiag = 0
                    endif
-                   
+
                    if (my_rank .gt. 0) then
                         write(305) m
                         write(305) xp
@@ -312,10 +312,10 @@ program hybrid
                         write(315) mrat
                         write(317) m
                         write(317) beta_p
-                        
+
                         ndiag = 0
                   endif
-                   
+
             endif
 !            write(*,*) 'minimum density.....', minval(np(:,:,:))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -329,12 +329,12 @@ program hybrid
 !                              EB1,EB1x,EB1y,EB1z,EE,EeP,input_E,Ni_tot, &
 !                              ijkp,mstart,input_p,input_EeP,prev_Etot,nf1,nf3,nfp1, &
 !                              input_chex,input_bill,pf,pf1,mrat,m_arr
-                              
+
 !                  endif
 !            endif
-            
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            
+
       enddo     !End Main Loop
       close(110)
       close(115)
@@ -362,7 +362,7 @@ program hybrid
       close(340)
       close(342)
       close(350)
-      
+
       call system_clock(t2,cnt_rt)
       time=(real(t2) - real(t1))/real(cnt_rt)
       if (my_rank .eq. 0) then
@@ -370,11 +370,11 @@ program hybrid
             write(*,*) 'Elapsed time .....', time, ' sec'
             write(*,*)
       endif
-      
+
       call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-      
+
       call MPI_FINALIZE(ierr)
 
 end program hybrid
 
-      
+
