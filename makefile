@@ -27,7 +27,13 @@ hybrid: clean $(OBJECTS)
 	$(FORT) -o $@ $(OBJECTS) $(LFLAGS)
 
 clean:
-	rm -f *.o hybrid *.out *.mod
+	rm -f *.o *.mod
+
+cleanAll: clean
+	rm -f hybrid
+
+cleanAnalysis:
+	rm -f vampir* *.lst
 
 dimensions.o:dimensions.f90;$(F90) -c dimensions.f90
 mult_proc.o:mult_proc.f90;$(F90) -c mult_proc.f90
