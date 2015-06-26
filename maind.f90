@@ -11,7 +11,6 @@ program hybrid
       use gutsf
       use gutsp
       use grid_interp
-      use chem_rates
       use grid
       use iso_fortran_env
 

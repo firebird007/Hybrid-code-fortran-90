@@ -187,7 +187,6 @@ module gutsp
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine get_vplus_vminus()
-            use dimensions
             use inputs, only: dt
             use var_arrays, only: Ep,btc,vp,vplus,vminus,Ni_tot,ijkp,mrat,wght
             implicit none
@@ -256,7 +255,6 @@ module gutsp
 ! The routine calculates v at time level n, and the associated bulk
 ! flow velocity up using the v+, v- technique.  The new up at
 ! time level n replaces the provisional extrapolation for up.
-            use dimensions
             use var_arrays, only:vp1,vplus,vminus,up,np,Ni_tot,beta,beta_p,wght
             implicit none
             integer:: l,m
@@ -273,7 +271,6 @@ module gutsp
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine get_vp_final()
-            use dimensions
             use inputs, only: dt
             use var_arrays, only: Ep,vp,vp1,vplus,Ni_tot
             implicit none
@@ -336,7 +333,6 @@ module gutsp
 ! grid points associated with the interpolation.  These 8 points
 ! are determined by the location of the particle within the main
 ! cell.  There are 8 sets of 8 grid points for each cell.
-            use dimensions
             use inputs, only: dx,dy
             use grid, only: qx,qy,qz
             use var_arrays, only: xp,Ni_tot,ijkp,wght
@@ -496,9 +492,7 @@ module gutsp
 ! grid points associated with the interpolation.  These 8 points
 ! are determined by the location of the particle within the main
 ! cell.  There are 8 sets of 8 grid points for each cell.
-            use dimensions
             use grid, only: qx,qy,qz
-            use inputs, only: dx,dy
             use var_arrays, only: xp,Ni_tot,ijkp,wght
             implicit none
             real:: vol,x1,x2,y1,y2,z1,z2

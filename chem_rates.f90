@@ -118,7 +118,6 @@ module chem_rates
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine res_chex()
-            use dimensions
             use misc
             use inputs, only: dt,m_pu
             use var_arrays, only: Ni_tot,m_arr,mrat,vp

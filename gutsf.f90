@@ -4,7 +4,6 @@ module gutsf
 
       subroutine f_update_tlev(b1,b12,b1p2,bt,b0) !loops run 1 o n since values are only being copied
             use dimensions
-            use boundary
             implicit none
             real, intent(in):: b1p2(nx,ny,nz,3), b0(nx,ny,nz,3)
             real, intent(inout):: b1(nx,ny,nz,3)
