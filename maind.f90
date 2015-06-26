@@ -153,7 +153,6 @@ program hybrid
 
       if (my_rank .eq. 0) then
             open(110,file=trim(out_dir)//'c.np.dat',status='unknown',form='unformatted')
-            open(115,file=trim(out_dir)//'c.np_b.dat',status='unknown',form='unformatted')
             open(120,file=trim(out_dir)//'c.mixed.dat',status='unknown',form='unformatted')
             open(130,file=trim(out_dir)//'c.b1.dat',status='unknown',form='unformatted')
             open(140,file=trim(out_dir)//'c.aj.dat',status='unknown',form='unformatted')
@@ -171,8 +170,6 @@ program hybrid
             open(315,file=trim(out_dir)//'c.mrat_0.dat',status='unknown',form='unformatted')
             open(317,file=trim(out_dir)//'c.beta_p_0.dat',status='unknown',form='unformatted')
             open(320,file=trim(out_dir)//'c.np_wake.dat',status='unknown',form='unformatted')
-            open(330,file=trim(out_dir)//'c.up_t.dat',status='unknown',form='unformatted')
-            open(340,file=trim(out_dir)//'c.up_b.dat',status='unknown',form='unformatted')
             open(342,file=trim(out_dir)//'c.test_part.dat',status='unknown',form='unformatted')
             open(350,file=trim(out_dir)//'c.mnp.dat',status='unknown',form='unformatted')
        endif
@@ -274,13 +271,11 @@ program hybrid
                         write(110) m
                         write(110) np
                         write(115) m
-                        write(115) np_b
 !                        write(120) m
 !                        write(120) mixed
                         write(130) m
                         write(130) bt
                         write(140) m
-                        write(140) aj*alpha*np3
                         write(150) m
                         write(150) E
                         write(180) m
@@ -296,9 +291,7 @@ program hybrid
                         write(317) m
                         write(317) beta_p
                         write(330) m
-                        write(330) up_t
                         write(340) m
-                        write(340) up_b
                         write(350) m
                         write(350) mnp
 

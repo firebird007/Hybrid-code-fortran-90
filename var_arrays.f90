@@ -9,7 +9,6 @@ module Var_Arrays
                   btmf(nx,ny,nz,3), &   !main cell contravarient bt field
                   btc(nx,ny,nz,3), &    !btmf at cell center for particle move
                   np(nx,ny,nz), &       !particle ion density at level n, n+1/2
-                  np3(nx,ny,nz,3), &
                   vp(Ni_max,3), &       !particle velocity at t level n+1/2
                   vp1(Ni_max,3), &      !particle velocity at t level n
                   vplus(Ni_max,3), &    !v+ used in velocity update
@@ -26,9 +25,6 @@ module Var_Arrays
                   mrat(Ni_max), &       !mass array for mulit-ion species
                   m_arr(Ni_max), &
                   np_t(nx,ny,nz), &
-                  np_b(nx,ny,nz), &
-                  up_t(nx,ny,nz,3), &
-                  up_b(nx,nz,nz,3), &
                   input_p(3), &
                   input_E, input_Eb, bndry_Eflux, prev_Etot, &
                   grav(nx,ny,nz)            !gravity term
