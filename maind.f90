@@ -256,8 +256,8 @@ program hybrid
                   write(160) input_E,input_EeP,Evp,Euf,EB1,EB1x,EB1y,EB1z,EE, &
                         EeP,input_chex,input_bill
                   write(190) m
-                  write(190) pup,puf,peb,input_p
-                  
+                  write(190) input_p
+
                   !fft output
 !                  write(401) b1(2,2,loc,1), b1(2,2,loc,2), b1(2,2,loc,3)
 
