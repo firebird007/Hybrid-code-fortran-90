@@ -1,5 +1,6 @@
 module boundary
       implicit none
+      save
       contains
 
       subroutine periodic(b)

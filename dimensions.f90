@@ -1,5 +1,6 @@
 module dimensions
       implicit none
+      save
 
       integer, parameter:: nx = 3, ny = 3, nz = 500
 

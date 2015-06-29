@@ -1,5 +1,6 @@
 module grid_interp
       implicit none
+      save
       contains
 
       subroutine edge_to_center(bt,btc)

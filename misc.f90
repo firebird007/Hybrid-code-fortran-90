@@ -1,5 +1,6 @@
 module misc
       implicit none
+      save
       contains
 
 !!!!!!!!!RANDOM NUMBER GENERATOR!!!!!!!!!!!!!!

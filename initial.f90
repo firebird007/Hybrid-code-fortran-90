@@ -1,6 +1,7 @@
 module initial
       use dimensions
       implicit none
+      save
       contains
 
 

@@ -1,5 +1,6 @@
 module part_init
       implicit none
+      save
       contains
 
       subroutine Energy_diag(Evp,Euf,EB1,EB1x,EB1y,EB1z,EE,EeP)

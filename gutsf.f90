@@ -1,5 +1,6 @@
 module gutsf
       implicit none
+      save
       contains
 
       subroutine f_update_tlev(b1,b12,b1p2,bt,b0) !loops run 1 o n since values are only being copied
