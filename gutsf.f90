@@ -3,10 +3,10 @@ module gutsf
       save
       contains
 
-      subroutine f_update_tlev(b1,b12,b1p2,bt,b0) !loops run 1 o n since values are only being copied
+      subroutine f_update_tlev(b1,b12,b1p2,bt) !loops run 1 o n since values are only being copied
             use dimensions
             implicit none
-            real, intent(in):: b1p2(nx,ny,nz,3), b0(nx,ny,nz,3)
+            real, intent(in):: b1p2(nx,ny,nz,3)
             real, intent(inout):: b1(nx,ny,nz,3)
             real, intent(out):: bt(nx,ny,nz,3), b12(nx,ny,nz,3)
 

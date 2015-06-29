@@ -99,7 +99,7 @@ program hybrid
       write(*,*) Ni_tot_sys, Ni_tot, procnum
       write(*,*) 'Particles per cell...', Ni_tot_sys/nz
 
-      call f_update_tlev(b1,b12,b1p2,bt,b0)
+      call f_update_tlev(b1,b12,b1p2,bt)
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !  Check for restart flag
@@ -237,7 +237,7 @@ program hybrid
 
                   call correct_B(b1,b1p2,E,aj,up,np,nu,dtsub)
 
-                  call f_update_tlev(b1,b12,b1p2,bt,b0)
+                  call f_update_tlev(b1,b12,b1p2,bt)
 
             enddo
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
