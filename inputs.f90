@@ -7,8 +7,10 @@ module inputs
 
       real:: b0_init, nf_init,dt_frac, vsw, vth, Ni_tot_frac, dx_frac, &
             nu_init_frac,lambda_i,m_pu, mO, ppc, nu_init, ion_amu, load_rate
+      private nf_init, dt_frac, vsw, ni_tot_frac, dx_frac, nu_init_frac, lambda_i, ion_amu, load_rate
       real, parameter:: mion = 3.841e-26
       integer:: mp, nt, nout, loc
+      private loc
       integer(4):: Ni_tot_0
 
       real, parameter:: q=1.6e-19         !electron charge
@@ -47,11 +49,13 @@ module inputs
 
       real:: np_top, np_bottom, b0_top, b0_bottom, vth_top, vth_bottom, &
              m_top, m_bottom, m_heavy, np_bottom_proton
+      private m_top, m_bottom, np_bottom_proton
 
 
       real, parameter:: beta_particle = 1.0     !beta value of intial particles
       real, parameter:: beta_pu = 10.0            !beta value of pickup ions
       real:: omega_p                            !ion gyrofrequency
+      private omega_p
 
 !       Electron ion collision frequency
       real, parameter:: lww2 = 1.00             !artificial diffusion for the magnetic field update
