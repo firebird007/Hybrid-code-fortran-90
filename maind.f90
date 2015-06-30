@@ -18,7 +18,6 @@ program hybrid
 
       real:: Evp,Euf,EB1,EB1x,EB1y,EB1z,EE,EeP,input_EeP
       real:: input_chex, input_bill,dtsub
-      real:: pup(3),puf(3),peb(3)
       character(2):: filenum!(16) !max 16 processors
       integer:: ierr,t1,t2,cnt_rt,m,mstart,ndiag
       real(8):: time

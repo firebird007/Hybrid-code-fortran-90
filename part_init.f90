@@ -9,7 +9,7 @@ module part_init
             use mult_proc, only: my_rank
             use grid, only: dx_cell,dy_cell,dz_cell
             use inputs, only: mion,q,mu0,mO,km_to_m,epsilon
-            use var_arrays, only: vp,b0,b1,E,nu,up,np,Ni_tot,beta,beta_p,input_E,bndry_Eflux,m_arr
+            use var_arrays, only: vp,b0,b1,E,up,np,Ni_tot,beta,beta_p,input_E,bndry_Eflux,m_arr
             implicit none
             real, intent(out):: Euf,EB1,EB1x,EB1y,EB1z,EE,EeP,Evp
             real:: denf,m_q,recvbuf,total_E,vol
@@ -77,15 +77,15 @@ module part_init
       subroutine load_Maxwellian(vth,Ni_tot_1,mass,mratio)
             use dimensions
             use misc
-            use inputs, only: PI, dx, dy, km_to_m
+            use inputs, only: PI, km_to_m
             use grid, only: qx,qy,qz,dz_grid
             use gutsp
-            use var_arrays, only: np,vp,vp1,xp,input_p,up,Ni_tot,input_E,ijkp,m_arr,mrat,beta,beta_p,wght,grav,temp_p
+            use var_arrays, only: vp,vp1,xp,input_p,Ni_tot,input_E,m_arr,mrat,beta,beta_p,grav
             implicit none
             integer(4), intent(in):: Ni_tot_1
             real, intent(in):: mratio, mass, vth
 
-            real:: vth2, vx, vy, vz
+            real:: vx, vy, vz
             integer:: l,m,i,j,k
 
 !            v1=1.0

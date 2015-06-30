@@ -12,7 +12,7 @@ module gutsp
 ! bulk flow velocity to time level n, and replaces up_n-3/2
 ! with up_n-1/2
             use dimensions
-            use var_arrays, only: up,vp,vp1,np,Ni_tot,beta,beta_p,wght
+            use var_arrays, only: vp,vp1,Ni_tot
             implicit none
             real:: v_at_n(Ni_max,3)
             integer:: l,m
@@ -197,7 +197,7 @@ module gutsp
 ! The routine calculates v at time level n, and the associated bulk
 ! flow velocity up using the v+, v- technique.  The new up at
 ! time level n replaces the provisional extrapolation for up.
-            use var_arrays, only:vp1,vplus,vminus,up,np,Ni_tot,beta,beta_p,wght
+            use var_arrays, only:vp1,vplus,vminus,Ni_tot
             implicit none
             integer:: l,m
 
@@ -217,7 +217,7 @@ module gutsp
             use var_arrays, only: Ep,vp,vp1,vplus,Ni_tot
             implicit none
 
-            integer:: l,m,ierr
+            integer:: l,m
 
             do l=1, Ni_tot
                   do m=1,3
@@ -278,7 +278,7 @@ module gutsp
 ! are determined by the location of the particle within the main
 ! cell.  There are 8 sets of 8 grid points for each cell.
             use grid, only: qx,qy,qz
-            use var_arrays, only: xp,Ni_tot,ijkp,wght
+            use var_arrays, only: xp,Ni_tot,wght
             implicit none
             real:: vol,x1,x2,y1,y2,z1,z2
             integer:: i,j,k,l
@@ -837,8 +837,8 @@ module gutsp
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine get_pindex(i,j,k,l)
 !            use dimensions
-            use inputs, only: dx,dy
-            use grid, only: qx,qy,qz
+            use inputs, only: dy
+            use grid, only: qx,qz
             use var_arrays, only: ijkp,xp
             implicit none
             integer, intent(in):: l

@@ -15,7 +15,7 @@ module misc
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       subroutine seed_mpi(my_rank)
             integer, intent(in):: my_rank
-            integer::i, time(8)
+            integer:: time(8)
             integer, dimension(12):: seed
 
             call date_and_time(values=time)

@@ -9,7 +9,7 @@ module inputs
             nu_init_frac,lambda_i,m_pu, mO, ppc, nu_init, ion_amu, load_rate
       private nf_init, dt_frac, vsw, ni_tot_frac, dx_frac, nu_init_frac, lambda_i, ion_amu, load_rate
       real, parameter:: mion = 3.841e-26
-      integer:: mp, nt, nout, loc
+      integer:: nt, nout, loc
       private loc
       integer(4):: Ni_tot_0
 
@@ -29,8 +29,6 @@ module inputs
 
 !     logical variable for restart
 
-      integer, parameter:: mrestart = 6000       !use -1 for no save
-
 !       Neutral cloud expansion characteristics
       real:: vtop, vbottom
 
@@ -42,14 +40,11 @@ module inputs
       real, parameter:: pi = 3.14159
       real, parameter:: mu0 = pi*4.0e-7, &
                         epsilon = 8.85e-12, &
-                        rtod=180.0/pi, &
-                        km_to_m = 1.0e3, &
-                        kboltz = 1.38e-29, &
-                        tempf0 = 50*11600.0
+                        km_to_m = 1.0e3
 
       real:: np_top, np_bottom, b0_top, b0_bottom, vth_top, vth_bottom, &
-             m_top, m_bottom, m_heavy, np_bottom_proton
-      private m_top, m_bottom, np_bottom_proton
+             m_top, m_bottom, m_heavy
+      private m_top, m_bottom
 
       real:: omega_p                            !ion gyrofrequency
       private omega_p
