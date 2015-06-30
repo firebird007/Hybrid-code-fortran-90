@@ -18,19 +18,10 @@ module initial
             real, intent(inout):: input_Eb
 
             real:: eoverm, mO_q, vol
-            real:: b0_1x, b0_2x, b0_1y, b0_2y, phi
             integer:: i,j,k,m
 
             eoverm = q/mO
             mO_q = mO/q
-
-            phi = 2.0*PI/180.0
-
-            b0_1x = b0_top*eoverm*sin(phi)
-            b0_2x = b0_bottom*eoverm*sin(phi)
-
-            b0_1y = -b0_top*eoverm*cos(phi)
-            b0_2y = -b0_bottom*eoverm*cos(phi)
 
             do i=1,nx
                   do j=1,ny
@@ -79,8 +70,6 @@ module initial
             real:: xsf,zsf,zplus,zminus,xplus,xminus,yplus,yminus
 
             rk = nz/2
-            rj= ny/2
-            ri = nx/2
 !!!!!!!!!Unstretched grids!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             do j=1,ny

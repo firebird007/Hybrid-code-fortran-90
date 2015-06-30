@@ -7,7 +7,7 @@ module grid
       real:: dz_grid(nz), dz_cell(nz) !dz for grid/cell, variable in z
       real:: dx_grid(nx), dx_cell(nx), dy_grid(ny), dy_cell(ny)
       real:: xrat(nx), yrat(ny), zrat(nz)
-      integer:: ri,rj,rk
+      integer:: rk
 
 end module grid
 

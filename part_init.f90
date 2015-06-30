@@ -9,10 +9,10 @@ module part_init
             use mult_proc, only: my_rank
             use grid, only: dx_cell,dy_cell,dz_cell
             use inputs, only: mion,q,mu0,mO,km_to_m,epsilon
-            use var_arrays, only: vp,b0,b1,E,nu,up,np,Ni_tot,beta,beta_p,input_E,prev_Etot,bndry_Eflux,m_arr
+            use var_arrays, only: vp,b0,b1,E,nu,up,np,Ni_tot,beta,beta_p,input_E,bndry_Eflux,m_arr
             implicit none
             real, intent(out):: Euf,EB1,EB1x,EB1y,EB1z,EE,EeP,Evp
-            real:: denf,m_q,recvbuf,total_E,aveEvp,norm_E,vol
+            real:: denf,m_q,recvbuf,total_E,vol
             real:: S_Evp,S_input_E
             integer:: count, ierr
             integer:: i,j,k,m,l
@@ -63,7 +63,6 @@ module part_init
             S_input_E = recvbuf
 
             total_E = S_Evp + EE + EB1
-            aveEvp = S_Evp/S_input_E
 
 
             if (my_rank .eq. 0) then
@@ -71,8 +70,6 @@ module part_init
                   write(*,*) 'Normalized energy (bndry).........',total_E/(S_input_E+bndry_Eflux)
             endif
 
-            norm_E = total_E/S_input_E
-            prev_Etot = norm_E
 
       end subroutine Energy_diag
 
@@ -88,13 +85,8 @@ module part_init
             integer(4), intent(in):: Ni_tot_1
             real, intent(in):: mratio, mass, vth
 
-            integer:: disp
-            real:: amp, grad, vth2, vx, vy, vz, Temp, Tempcalc
+            real:: vth2, vx, vy, vz
             integer:: l,m,i,j,k
-
-            disp = 0 !Displacement of gradient
-            amp = 20.0  !amplitude of density
-            grad = 800.0 ! density gradient (larger = more gradual
 
 !            v1=1.0
 
@@ -165,12 +157,10 @@ module part_init
             ! Add a centrifugal gravity term to keep the plasma confined to the torus.  Use T * dn/dz = nmg.
             ! Depends on the density gradient.  Currently set as a gaussian.
 
-            Temp = vth**2/(3*kboltz)*mion*1.48*10-23!8.61738e-5
 !            write(*,*) 'vth.................', vth
 !            write(*,*) 'boltzman............', kboltz
 !            write(*,*) 'temperature(analytic)..', Temp
             call get_temperature()
-            Tempcalc = sum(temp_p(2,2,:))/1e6/nz !in kg km^2/s^2
 !            write(*,*) 'temperature (2,2,100)..', temp_p(2,2,2:10)/1.6e-19
 !            stop
 

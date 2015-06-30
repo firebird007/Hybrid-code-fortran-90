@@ -38,7 +38,7 @@ module gutsf
             real, intent(out):: cc(nx,ny,nz,3)
             real:: ct(nx,ny,nz,3)
             real:: ax,ay,az,bx,by,bz
-            integer:: i,j,k,im,jm,km,ip,jp,kp
+            integer:: i,j,k,ip,jp,kp
 
             call periodic(aa)
             call periodic(btc)
@@ -46,10 +46,6 @@ module gutsf
             do i=2,nx-1
                   do j=2,ny-1
                         do k=2,nz-1
-                              im = i-1
-                              jm = j-1
-                              km = k-1
-
                               ax = aa(i,j,k,1)
                               bx = btc(i,j,k,1)
 
@@ -264,8 +260,7 @@ module gutsf
             real, intent(in):: b1(nx,ny,nz,3), b1p2(nx,ny,nz,3), up(nx,ny,nz,3), nu(nx,ny,nz), &
                                np(nx,ny,nz)
             real, intent(out):: E(nx,ny,nz,3), aj(nx,ny,nz,3)
-            real:: b1p1(nx,ny,nz,3), &          !b1 at time level m+1/2
-                   btp1(nx,ny,nz,3), &          !bt at time level m+1/2
+            real:: btp1(nx,ny,nz,3), &          !bt at time level m+1/2
                    btp1mf(nx,ny,nz,3), &        !btp1 at contravariant position
                    btc(nx,ny,nz,3), a(nx,ny,nz,3), aa(nx,ny,nz,3), c(nx,ny,nz,3), gravc(nx,ny,nz)
             integer:: i,j,k,m
@@ -274,11 +269,8 @@ module gutsf
                   do j=1,ny
                         do k=1,nz
                               btp1(i,j,k,1) = 0.5*(b1p2(i,j,k,1) + b1(i,j,k,1))
-                              b1p1(i,j,k,1) = 0.5*(b1p2(i,j,k,1) + b1(i,j,k,1))
                               btp1(i,j,k,2) = 0.5*(b1p2(i,j,k,2) + b1(i,j,k,2))
-                              b1p1(i,j,k,2) = 0.5*(b1p2(i,j,k,2) + b1(i,j,k,2))
                               btp1(i,j,k,3) = 0.5*(b1p2(i,j,k,3) + b1(i,j,k,3))
-                              b1p1(i,j,k,3) = 0.5*(b1p2(i,j,k,3) + b1(i,j,k,3))
                         enddo
                   enddo
             enddo

@@ -45,8 +45,8 @@ module inputs
                         kboltz = 1.38e-29, &
                         tempf0 = 50*11600.0
 
-      real:: np_top, np_bottom, b0_top, b0_bottom, Lo, vth_top, vth_bottom, vth_max, &
-             m_top, m_bottom, m_heavy, np_bottom_proton, f_proton_top, mBa
+      real:: np_top, np_bottom, b0_top, b0_bottom, vth_top, vth_bottom, &
+             m_top, m_bottom, m_heavy, np_bottom_proton
 
 
       real, parameter:: beta_particle = 1.0     !beta value of intial particles
@@ -134,20 +134,16 @@ module inputs
 
                   mO = mion     !mass of H (kg)
 
-                  mBa = m_pu*mO !mass of Ba (kg)
 
                   m_heavy = 1.0
                   np_top = nf_init
                   np_bottom = nf_init/m_heavy
-                  f_proton_top = 0.5
                   b0_top= 1.0*b0_init
                   b0_bottom = b0_init
                   vth_top = vth
                   vth_bottom = vth
-                  vth_max = 3*vth
                   m_top = mion
                   m_bottom = mion
-                  Lo = 4.0*dx           !gradient scale length of boundary
 
                   nu_init = nu_init_frac*omega_p
 

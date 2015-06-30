@@ -17,18 +17,11 @@ module misc
             integer, intent(in):: my_rank
             integer::i, time(8)
             integer, dimension(12):: seed
-            real:: r
 
             call date_and_time(values=time)
 
             seed(:) = time(4) * ( 360000*time(5) + 6000*time(6) + 100*time(7) + time(8)) + my_rank*100
             call random_seed(PUT=seed)
-
-
-
-            do i=1,100
-                  call random_number(r)
-            enddo
 
       end subroutine seed_mpi
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

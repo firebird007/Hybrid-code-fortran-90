@@ -27,7 +27,7 @@ module Var_Arrays
                   m_arr(Ni_max), &
                   np_t(nx,ny,nz), &
                   input_p(3), &
-                  input_E, input_Eb, bndry_Eflux, prev_Etot, &
+                  input_E, input_Eb, bndry_Eflux, &
                   grav(nx,ny,nz)            !gravity term
 
       integer(4):: Ni_tot

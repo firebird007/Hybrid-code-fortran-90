@@ -20,10 +20,10 @@ program hybrid
       real:: input_chex, input_bill,dtsub
       real:: pup(3),puf(3),peb(3)
       character(2):: filenum!(16) !max 16 processors
-      integer:: ierr,t1,t2,cnt_rt,m,mstart,ndiag,seed
+      integer:: ierr,t1,t2,cnt_rt,m,mstart,ndiag
       real(8):: time
       logical:: restart = .false.
-      integer(4):: Ni_tot_sw,Ni_tot_sys
+      integer(4):: Ni_tot_sys
       integer:: i,j,k,n,ntf !looping indicies
       real (real64) :: dp
       integer, parameter :: dp_kind = kind(dp)
@@ -47,7 +47,6 @@ program hybrid
 
       Ni_tot=(nx-2)*(ny-2)*(nz-2)*int(ppc/procnum) !1D
       Ni_tot_0 = Ni_tot
-      Ni_tot_sw = Ni_tot
       Ni_tot_sys = Ni_tot*procnum
 
       if (my_rank .eq. 0) then
@@ -58,10 +57,8 @@ program hybrid
 
       mstart = 0
       ndiag = 0
-      prev_Etot = 1.0
 !      nuei = 0.0
 
-      seed = t1 + my_rank*100
 !      call random_initialize(seed)
       call seed_mpi(my_rank)
       call MPI_BARRIER(MPI_COMM_WORLD, ierr)
