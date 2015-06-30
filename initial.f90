@@ -6,7 +6,7 @@ module initial
 
 
       subroutine grd6_setup(b0,bt,b12,b1,b1p2,nu,input_Eb)
-            use inputs, only: q, mO, PI, b0_top, b0_bottom, b0_init, nu_init, km_to_m, mu0
+            use inputs, only: q, mO, b0_top, b0_bottom, b0_init, nu_init, km_to_m, mu0
             use grid, only: dx_cell, dy_cell, dz_cell
             implicit none
             real, intent(out):: b0(nx,ny,nz,3), &

@@ -77,7 +77,7 @@ module part_init
       subroutine load_Maxwellian(vth,Ni_tot_1,mass,mratio)
             use dimensions
             use misc
-            use inputs, only: PI, vsw, dx, dy, km_to_m, kboltz, mion
+            use inputs, only: PI, dx, dy, km_to_m
             use grid, only: qx,qy,qz,dz_grid
             use gutsp
             use var_arrays, only: np,vp,vp1,xp,input_p,up,Ni_tot,input_E,ijkp,m_arr,mrat,beta,beta_p,wght,grav,temp_p

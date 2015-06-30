@@ -51,9 +51,6 @@ module inputs
              m_top, m_bottom, m_heavy, np_bottom_proton
       private m_top, m_bottom, np_bottom_proton
 
-
-      real, parameter:: beta_particle = 1.0     !beta value of intial particles
-      real, parameter:: beta_pu = 10.0            !beta value of pickup ions
       real:: omega_p                            !ion gyrofrequency
       private omega_p
 

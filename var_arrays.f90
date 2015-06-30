@@ -7,7 +7,6 @@ module Var_Arrays
                   b12(nx,ny,nz,3), &    !b1 at previous time step
                   b1p2(nx,ny,nz,3), &   !temp b1 at time level m+1
                   bt(nx,ny,nz,3), &     !total mag field, mc covarient
-                  btmf(nx,ny,nz,3), &   !main cell contravarient bt field
                   btc(nx,ny,nz,3), &    !btmf at cell center for particle move
                   np(nx,ny,nz), &       !particle ion density at level n, n+1/2
                   vp(Ni_max,3), &       !particle velocity at t level n+1/2
@@ -25,7 +24,6 @@ module Var_Arrays
                   beta, beta_p(Ni_max), &       !variable for particle scaling
                   mrat(Ni_max), &       !mass array for mulit-ion species
                   m_arr(Ni_max), &
-                  np_t(nx,ny,nz), &
                   input_p(3), &
                   input_E, input_Eb, bndry_Eflux, &
                   grav(nx,ny,nz)            !gravity term
@@ -35,15 +33,12 @@ module Var_Arrays
       !Location (indices) of particles in the grid
 
       integer:: ijkp(Ni_max,3)
-      logical:: in_bounds(Ni_max)
-      real:: mix_ind(Ni_max)
 
       !Weight variables for trilinear interpolation
 
       real:: wght(Ni_max,8)
 
 
-      integer:: np_t_flg(Ni_max), np_b_flg(Ni_max)
 
 end module Var_Arrays
 
