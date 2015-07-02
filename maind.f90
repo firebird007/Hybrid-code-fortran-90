@@ -41,7 +41,7 @@ program hybrid
       call check_mpi_error(ierr)
 
 
-      call system_clock(t1, cnt_rt)
+      call system_clock(t1)
 
 !Initialize all variables
 
