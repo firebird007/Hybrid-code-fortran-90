@@ -21,7 +21,7 @@ module misc
                         stop
                   endif
 
-                  write(error_unit,*) err_str
+                  write(error_unit,*) err_str(:length)
                   stop
             endif
 
