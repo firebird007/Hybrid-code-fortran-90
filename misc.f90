@@ -3,6 +3,30 @@ module misc
       save
       contains
 
+      subroutine check_mpi_error(ierr)
+            use mpi
+            use iso_fortran_env
+
+            integer :: ierr
+            integer :: double_err
+
+            integer :: length
+            character (len=256) :: err_str
+
+            if (ierr .ne. MPI_SUCCESS) then
+                  call MPI_ERROR_STRING(ierr, err_str, length, double_err)
+
+                  if (double_err .ne. MPI_SUCCESS) then
+                        write(error_unit,*) "Detected an error and failed to retrive error string"
+                        stop
+                  endif
+
+                  write(error_unit,*) err_str
+                  stop
+            endif
+
+      end subroutine check_mpi_error
+
 !!!!!!!!!RANDOM NUMBER GENERATOR!!!!!!!!!!!!!!
 
       real function pad_ranf()

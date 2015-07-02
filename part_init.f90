@@ -6,6 +6,7 @@ module part_init
       subroutine Energy_diag(Evp,Euf,EB1,EB1x,EB1y,EB1z,EE,EeP)
             use dimensions
             use mpi
+            use misc, only: check_mpi_error
             use mult_proc, only: my_rank
             use grid, only: dx_cell,dy_cell,dz_cell
             use inputs, only: mion,q,mu0,mO,km_to_m,epsilon
@@ -55,11 +56,14 @@ module part_init
 
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             call MPI_ALLREDUCE(Evp,recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             S_Evp = recvbuf
 
             call MPI_ALLREDUCE(input_E,recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             S_input_E = recvbuf
 
             total_E = S_Evp + EE + EB1

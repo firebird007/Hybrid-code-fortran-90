@@ -328,6 +328,7 @@ module gutsp
 ! Weight density to eight nearest grid points
             use dimensions
             use MPI
+            use misc, only: check_mpi_error
             use grid, only: dx_grid,dy_grid,dz_grid
             use boundary
             use var_arrays, only: np,Ni_tot,ijkp,beta,beta_p,wght
@@ -374,7 +375,9 @@ module gutsp
 
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             call MPI_ALLREDUCE(np(:,:,:),recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             np(:,:,:) = reshape(recvbuf,(/nx,ny,nz/))
 
@@ -387,6 +390,7 @@ module gutsp
 ! Weight density to eight neares grid points
             use dimensions
             use MPI
+            use misc, only: check_mpi_error
             use boundary
             use inputs, only: mion
             use grid, only: qx,qy,qz
@@ -435,7 +439,9 @@ module gutsp
             mnp(:,:,nz-1) = mnp(:,:,nz-1)+mnp(:,:,1)
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             call MPI_ALLREDUCE(mnp(:,:,:),recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             mnp(:,:,:) = reshape(recvbuf,(/nx,ny,nz/))
 
@@ -449,6 +455,7 @@ module gutsp
       subroutine update_up(vp)
             use dimensions
             use MPI
+            use misc, only: check_mpi_error
             use boundary
             use grid, only: qx,qy,qz
             use var_arrays, only: np,up,Ni_tot,ijkp,beta,beta_p,wght
@@ -588,7 +595,9 @@ module gutsp
             call periodic(ct)
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             call MPI_ALLREDUCE(ct(:,:,:,:),recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             ct(:,:,:,:) = reshape(recvbuf,(/nx,ny,nz,3/))
 
@@ -616,6 +625,7 @@ module gutsp
       subroutine get_temperature()
             use dimensions
             use MPI
+            use misc, only: check_mpi_error
             use boundary
             use inputs, only: mion
             use grid, only: qx,qy,qz
@@ -711,7 +721,9 @@ module gutsp
             call periodic(ct)
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             call MPI_ALLREDUCE(ct(:,:,:,:),recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             ct(:,:,:,:) = reshape(recvbuf,(/nx,ny,nz,3/))
 
@@ -805,7 +817,9 @@ module gutsp
             call periodic(ct)
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
             call MPI_ALLREDUCE(ct(:,:,:,:),recvbuf,count,MPI_REAL,MPI_SUM,MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             ct(:,:,:,:) = reshape(recvbuf,(/nx,ny,nz,3/))
 

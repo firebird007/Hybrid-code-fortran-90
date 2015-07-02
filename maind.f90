@@ -34,8 +34,11 @@ program hybrid
       call initparameters()
 
       call MPI_INIT(ierr)
+      call check_mpi_error(ierr)
       call MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierr)
+      call check_mpi_error(ierr)
       call MPI_COMM_SIZE(MPI_COMM_WORLD, procnum, ierr)
+      call check_mpi_error(ierr)
 
 
       call system_clock(t1, cnt_rt)
@@ -61,6 +64,7 @@ program hybrid
 !      call random_initialize(seed)
       call seed_mpi(my_rank)
       call MPI_BARRIER(MPI_COMM_WORLD, ierr)
+      call check_mpi_error(ierr)
 
       if (.not. restart) then
             do i=1,nx
@@ -86,6 +90,7 @@ program hybrid
       bndry_Eflux = 0.0
 
       call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+      call check_mpi_error(ierr)
 
       !Initialize particles: use load Maxwellian, or sw_part_setup, etc.
       call load_Maxwellian(vth,1,mion,1.0)
@@ -245,6 +250,7 @@ program hybrid
 !       diagnositc output
 
             call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+            call check_mpi_error(ierr)
 
             if (my_rank .eq. 0) then
                   write(160) m
@@ -363,8 +369,10 @@ program hybrid
       endif
 
       call MPI_BARRIER(MPI_COMM_WORLD,ierr)
+      call check_mpi_error(ierr)
 
       call MPI_FINALIZE(ierr)
+      call check_mpi_error(ierr)
 
 end program hybrid
 
