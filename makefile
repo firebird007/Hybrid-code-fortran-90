@@ -1,18 +1,4 @@
-DEBUG ?= 1
-
-MPI = mpifort
-FORT = gfortran
-
-CFLAGS = -mcmodel=medium
-LFLAGS = -mcmodel=medium -static-libgfortran -static-libgcc -I/usr/local/include -pthread -I/usr/local/lib -Wl,-rpath -Wl,/usr/local/lib -Wl,--enable-new-dtags -L/usr/local/lib -Wl,-Bstatic -lmpi_usempi -lmpi_mpifh -lmpi -lopen-rte -lopen-pal -lm -lrt -lutil
-
-ifeq ($(DEBUG),1)
-	CFLAGS += -g3 -Og -fbounds-check -ffpe-trap=invalid,zero,overflow
-else
-	CFLAGS += -O3 -flto
-	LFLAGS += -O3 -flto
-endif
-F90 = $(MPI) $(CFLAGS)
+F90 = /usr/local/GNUOpenMPI/bin/mpif90
 
 FILES = dimensions.f90 mult_proc.f90 grid.f90 var_arrays.f90 inputs.f90 misc.f90 boundary.f90 grid_interp.f90 gutsf.f90 gutsp.f90 initial.f90 part_init.f90 chem_rates.f90 maind.f90
 FILESO = dimensions.f90 boundary.f90 grid_interp.f90 mult_proc.f90 var_arrays.f90 inputs.f90 grid.f90 initial.f90 gutsf.f90 misc.f90 part_init.f90 gutsp.f90 chem_rates.f90 maind.f90
@@ -24,7 +10,7 @@ OBJECTS = dimensions.o inputs.o grid.o mult_proc.o boundary.o misc.o grid_interp
 MODS = dimensions.mod mult_proc.mod var_array.mod inputs.mod grid.mod initial.mod gutsf.mod misc.mod boundary.mod part_init.mod grid_interp.mod gutsp.mod chem_rates.f90
 
 hybrid: clean $(OBJECTS)
-	$(FORT) -o $@ $(OBJECTS) $(LFLAGS)
+	$(F90) -o $@ $(OBJECTS) $(LFLAGS)
 
 clean:
 	rm -f *.o hybrid *.out *.mod
