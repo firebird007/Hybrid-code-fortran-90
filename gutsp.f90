@@ -13,7 +13,7 @@ module gutsp
 
             do m=1,3    !remove ion energy from total input energy
                   input_E = input_E - 0.5*m_arr(l)*(vp(ion_l,m)*km_to_m)**2 &
-                        / beta * beta_p(l)
+                        / (beta * beta_p(l))
             enddo
 
             do l = ion_l, Ni_tot-1
@@ -444,7 +444,7 @@ module gutsp
                                           !Add energy
                                           do m=1,3
                                                 input_E = input_E + &
-                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / beta*beta_p(l)
+                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / (beta*beta_p(l))
                                           enddo
 
                                           Ni_tot = Ni_tot +1
@@ -524,7 +524,7 @@ module gutsp
                                           !Add energy
                                           do m=1,3
                                                 input_E = input_E + &
-                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / beta*beta_p(l)
+                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / (beta*beta_p(l))
                                           enddo
 
                                           Ni_tot = Ni_tot +1
@@ -600,7 +600,7 @@ module gutsp
                                          !Add energy
                                           do m=1,3
                                                 input_E = input_E + &
-                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / beta*beta_p(l)
+                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / (beta*beta_p(l))
                                           enddo
 
                                           Ni_tot = Ni_tot +1
@@ -661,7 +661,7 @@ module gutsp
                                          !Add energy
                                           do m=1,3
                                                 input_E = input_E + &
-                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / beta*beta_p(l)
+                                                      0.5*m_arr(l)*(vp(l,m)*km_to_m)**2 / (beta*beta_p(l))
                                           enddo
 
                                           Ni_tot = Ni_tot +1
@@ -866,7 +866,8 @@ module gutsp
 !                  k=k-1
 !                  ijkp(l,3) = k
                   call get_pindex(i,j,k,l)
-
+                 
+                  
                   vol = 1.0/((qx(i+1)-qx(i))*(qy(j+1)-qy(j))*(qz(k+1)-qz(k)))
                   x1=abs(xp(l,1)-qx(i))
                   x2=abs(xp(l,1)-qx(i+1))
@@ -874,6 +875,7 @@ module gutsp
                   y2=abs(xp(l,2)-qy(j+1))
                   z1=abs(xp(l,3)-qz(k))
                   z2=abs(xp(l,3)-qz(k+1))
+                 
                   wght(l,1) = x2*y2*z2*vol
                   wght(l,2) = x1*y2*z2*vol
                   wght(l,3) = x2*y2*z1*vol
@@ -882,10 +884,11 @@ module gutsp
                   wght(l,6) = x1*y1*z2*vol
                   wght(l,7) = x2*y1*z1*vol
                   wght(l,8) = x1*y1*z1*vol
-
+                 
+                
             enddo
-
-
+            
+            
       end subroutine get_interp_weights
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -918,7 +921,8 @@ module gutsp
                   kp=k+1
 
                   volb = 1.0/(dx_grid(i)*dy_grid(j)*dz_grid(k)*beta*beta_p(l))
-
+!                  volb = beta_p(l)/(dx_grid(i)*dy_grid(j)*dz_grid(k)*beta)
+                  
                   np(i,j,k) = np(i,j,k) + wght(l,1)*volb
                   np(ip,j,k) = np(ip,j,k) + wght(l,2)*volb
                   np(i,j,kp) = np(i,j,kp) + wght(l,3)*volb

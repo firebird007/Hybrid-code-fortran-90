@@ -18,7 +18,7 @@ clean:
 dimensions.o:dimensions.f90;$(F90) -c dimensions.f90
 mult_proc.o:mult_proc.f90;$(F90) -c mult_proc.f90
 grid.o:grid.f90;$(F90) -c grid.f90
-inputs.o:inputs.f90 dimensions.o mult_proc.o;$(F90) -c inputs.f90
+inputs.o:inputs.f90 dimensions.o mult_proc.o grid.o var_arrays.o;$(F90) -c inputs.f90
 boundary.o:boundary.f90 $(INCLUDE);$(F90) -c boundary.f90
 misc.o:misc.f90 $(INCLUDE) boundary.o;$(F90) -c misc.f90
 grid_interp.o:grid_interp.f90 $(INCLUDE2);$(F90) -c grid_interp.f90
@@ -29,6 +29,8 @@ part_init.o:part_init.f90 $(INCLUDE3);$(F90) -c part_init.f90
 chem_rates.o:chem_rates.f90 $(INCLUDE3);$(F90) -c chem_rates.f90
 var_arrays.o:var_arrays.f90;$(F90) -c var_arrays.f90
 maind.o:maind.f90 $(INCLUDE4);$(F90) -c maind.f90
+dispersion.o:dispersion.f90;$(F90) -c dispersion.f90
+
 
 dimensions.mod:dimensions.f90 $(INCLUDE);$(F90) -c dimensions.f90
 mult_proc.mod:mult_proc.f90 $(INCLUDE);$(F90) -c mult_proc.f90
