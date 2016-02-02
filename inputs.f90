@@ -78,8 +78,6 @@ module inputs
                  write(*,*) 'm_pu..............',m_pu
                  read(100,*) nf_init
                  write(*,*) 'nf_init...........',nf_init
-                 read(100,*) amp
-                 write(*,*) 'amplitude.........', amp
                  read(100,*) dt_frac
                  write(*,*) 'dt_frac...........',dt_frac
                  read(100,*) nt
@@ -94,20 +92,10 @@ module inputs
                  write(*,*) 'Ni_tot_frac.......',Ni_tot_frac
                  read(100,*) dx_frac
                  write(*,*) 'dx_frac...........',dx_frac
-                 read(100,*) grad
-                 write(*,*) 'scale height......', grad
-                 read(100,*) height_stretch
-                 write(*,*) 'start stretching...', height_stretch
-                 read(100,*) zsf
-                 write(*,*) 'z stretch factor...', zsf
                  read(100,*) nu_init_frac
                  write(*,*) 'nu_init_frac......',nu_init_frac
                  read(100,*) ppc
                  write(*,*) 'part per cell.....',ppc
-                 read(100,*) loc
-                 write(*,*) 'location of transform...',loc
-                 read(100,*) load_rate
-                 write(*,*) 'mass loading rate.....', load_rate
                  read(100,*) out_dir
                  write(*,*) 'output dir........',out_dir
                  
