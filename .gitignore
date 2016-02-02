@@ -1,0 +1,9 @@
+*.swp
+*.mod
+*.o
+output
+error
+hybrid
+*.bak
+tags
+/tmp
