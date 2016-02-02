@@ -8,7 +8,7 @@ module inputs
       real:: b0_init, nf_init,dt_frac, vsw, vth, Ni_tot_frac, dx_frac, &
             nu_init_frac,lambda_i,m_pu, mO, ppc, nu_init, ion_amu, load_rate, amp, &
             height_stretch, zsf
-      real, parameter:: mion = 3.841e-26
+      real, parameter:: mion = 1.670e-27
       integer:: mp, nt, nout, loc, grad, nrgrd
       integer(4):: Ni_tot_0
 
