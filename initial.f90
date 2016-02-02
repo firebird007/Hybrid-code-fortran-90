@@ -227,6 +227,10 @@ module initial
             rj= ny/2
             ri = nx/2
 !!!!!!!!!Unstretched grids!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  
+            do k=1,nz
+                  qz(k) = k*delz
+                  dz_grid(k) = delz
+            enddo
   
             do j=1,ny
                   qy(j) = j*dy
@@ -239,32 +243,32 @@ module initial
             enddo
             
 !!!!!!!!!Stretch z!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            qz(nz/2) = 0
-            do k=rk+1, nz
-                  qz(k) = qz(k-1) + zsf*3e8/1e3*sqrt(8.85e-12*mion/(q*q* &
-                  (nf_init/1e9+nf_init/1e9*(amp-1.0)*exp(-(qz(k-1)/(grad*delz))**2))))
-            enddo
-            
-!            do k = 1, rk-1
-!                  ind = rk-k
-!                  qz(ind) = qz(ind+1) - zsf*3e8/1e3*sqrt(8.85e-12*mion/(q*q* &
-!                  (nf_init/1e9+nf_init/1e9*(amp-1.0)*exp(-(qz(ind+1)/(grad*delz))**2))))
+!            qz(nz/2) = 0
+!            do k=rk+1, nz
+!                  qz(k) = qz(k-1) + zsf*3e8/1e3*sqrt(8.85e-12*mion/(q*q* &
+!                  (nf_init/1e9+nf_init/1e9*(amp-1.0)*exp(-(qz(k-1)/(grad*delz))**2))))
 !            enddo
-
-            do k = 1 , rk-1
-                  ind = rk - k
-                  qz(ind) = -qz(rk+k)
-            enddo
-            zplus = qz(nz-1)
-            do k=1,nz
-                  qz(k) = qz(k) + zplus
-            enddo
-            
-            do k=1, nz-1
-                  dz_grid(k) = qz(k+1)-qz(k)
-            enddo
-            
-            dz_grid(nz) = dz_grid(nz-1)
+!            
+!!            do k = 1, rk-1
+!!                  ind = rk-k
+!!                  qz(ind) = qz(ind+1) - zsf*3e8/1e3*sqrt(8.85e-12*mion/(q*q* &
+!!                  (nf_init/1e9+nf_init/1e9*(amp-1.0)*exp(-(qz(ind+1)/(grad*delz))**2))))
+!!            enddo
+!
+!            do k = 1 , rk-1
+!                  ind = rk - k
+!                  qz(ind) = -qz(rk+k)
+!            enddo
+!            zplus = qz(nz-1)
+!            do k=1,nz
+!                  qz(k) = qz(k) + zplus
+!            enddo
+!            
+!            do k=1, nz-1
+!                  dz_grid(k) = qz(k+1)-qz(k)
+!            enddo
+!            
+!            dz_grid(nz) = dz_grid(nz-1)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
             dz_cell(1) = dz_grid(1)
