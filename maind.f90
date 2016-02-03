@@ -346,8 +346,8 @@ program hybrid
                         write(300) temp_p/1.6e-19  !output in eV
 !                        write(305) m
 !                        write(305) xp
-!                        write(310) m
-!                        write(310) vp
+                        write(310) m
+                        write(310) vp
 !                        write(315) m
 !                        write(315) mrat
 !                        write(317) m
